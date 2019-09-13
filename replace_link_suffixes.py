@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 This is part of the [MoVeDo](https://github.com/movedo) project.
 See LICENSE.md for copyright information.

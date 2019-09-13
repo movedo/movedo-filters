@@ -14,7 +14,7 @@ This might typicaly be used as a preparation step
 when combining a multitude of documents found within a directory tree
 into a single document at the directory trees root.
 Or more pracitcally: when creating a single PDF
-out of a bunch of Markdown or HTML files scatered aroudn the filesystem.
+out of a bunch of Markdown or HTML files scatered around the filesystem.
 
 Usage example:
 $ pandoc -f markdown -t markdown --atx-headers \

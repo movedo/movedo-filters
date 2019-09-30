@@ -70,8 +70,8 @@ def prefix_html(elem):
         tag.name == "img" and tag.get("src") != None)
     for img in imgs_with_src:
         new_src = prefix_if_rel_path(img.get("src"))
-        if new_src != anchor.get("src"):
-            anchor["src"] = new_src
+        if new_src != img.get("src"):
+            img["src"] = new_src
             replaced = True
     if replaced:
         elem.text = str(parsed)

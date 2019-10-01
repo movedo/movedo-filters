@@ -19,6 +19,7 @@ out of a bunch of Markdown or HTML files scatered around the filesystem.
 Usage example:
 $ pandoc -f markdown -t markdown --atx-headers \
         -M allp_prefix="some/static/prefix/" \
+        -M allp_file="file-name.md" \
         --filter add_local_link_prefix.py \
         -o output.md \
         input.md
@@ -35,6 +36,8 @@ from _common import is_rel_path
 # parameters
 # should be something like 'some/static/prefix/'
 prefix = '<default-prefix>'
+# should be something like 'file-name.md'
+file_name = '<default-file-name>'
 
 def prefix_if_rel_path(url):
     """
@@ -42,7 +45,10 @@ def prefix_if_rel_path(url):
     if the URL is a link to/image with a relative path.
     """
     global prefix
+    global file_name
     if is_rel_path(url):
+        if url.startswith('#'):
+            url = file_name + url
         url = prefix + url
     return url
 
@@ -82,7 +88,9 @@ def prefix_html(elem):
 def prepare(doc):
     """The panflute filter init method."""
     global prefix
+    global file_name
     prefix = doc.get_metadata('allp_prefix', "<allp_prefix>")
+    file_name = doc.get_metadata('allp_file', "<allp_file>")
 
 def action(elem, doc):
     """The panflute filter main method, called once per element."""

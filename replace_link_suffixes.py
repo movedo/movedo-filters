@@ -24,8 +24,13 @@ $ pandoc -f markdown -t markdown --atx-headers \
 # HACK for panflute on python 2
 from __future__ import unicode_literals
 
+import re
 import panflute as pf
 from _common import is_rel_path
+
+# constants
+REGEX_REF_DELETER = re.compile(r'#.*$')
+REGEX_PATH_DELETER = re.compile(r'^.*#')
 
 # parameters
 relative_only = True
@@ -38,11 +43,25 @@ def prepare(doc):
     ext_from = doc.get_metadata('rls_ext_from', "<rls_ext_from>")
     ext_to = doc.get_metadata('rls_ext_to', "<rls_ext_to>")
 
+def replace_link_suffix(url):
+    """If the URL fits, we replace the file suffix."""
+    if not is_rel_path(url) and relative_only:
+        return url
+    path = re.sub(REGEX_REF_DELETER, '', url)
+    ref = re.sub(REGEX_PATH_DELETER, '', url)
+    if ref == url:
+        ref = None
+    if path.endswith(ext_from):
+        url = path[:-len(ext_from)] + ext_to
+        if ref != None:
+            url = url + '#' + ref
+    return url
+
 def action(elem, doc):
     """The panflute filter main method, called once per element."""
-    if isinstance(elem, pf.Link) and elem.url.endswith(ext_from) \
-            and (not relative_only or is_rel_path(elem.url)):
-        elem.url = elem.url[:-len(ext_from)] + ext_to
+    if isinstance(elem, pf.Link):
+        elem.url = replace_link_suffix(elem.url)
+    # TODO Also do this with HTML links (using BeautifulSoup, see other filters)
     return elem
 
 def finalize(doc):

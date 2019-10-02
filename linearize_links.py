@@ -114,6 +114,8 @@ def prepare(doc):
     global doc_path, id_prefix
     doc_path = doc.get_metadata('ll_doc_path', "<ll_doc_path>")
     id_prefix = linearize_link_path(doc_path)
+    # Add reference for the whole file at the top
+    doc.content.insert(0, pf.Para(pf.RawInline('<a name="%s"/>' % id_prefix)))
 
 def action(elem, doc):
     """The panflute filter main method, called once per element."""

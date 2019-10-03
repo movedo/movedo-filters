@@ -76,18 +76,24 @@ def linearize_url(elem):
     if is_rel_path(elem.url):
         elem.url = '#' + linearize_link_path(elem.url)
 
-def linearize_identifier(elem):
-    """Prepends the reference-formatted relative file path to the identifier."""
+def linearize_identifier(ident):
+    """Prepends the reference-formatted relative file-path to the supplied identifier."""
     global id_prefix
     if id_prefix != '':
-        if elem.identifier != '':
-            elem.identifier = '-' + elem.identifier
-        elem.identifier = id_prefix + elem.identifier
+        if ident != '':
+            ident = '-' + ident
+        ident = id_prefix + ident
+    return ident
+
+def linearize_identifier_elem(elem):
+    """Prepends the reference-formatted relative file-path to the supplied elements identifier."""
+    elem.identifier = linearize_identifier(elem.identifier)
 
 def linearize_html_anchor(elem):
     """Prepends the reference-formatted relative file path to the identifier."""
     parsed = BeautifulSoup(elem.text, 'html.parser')
     replaced = False
+    # Replace anchors (links)
     anchors_with_href = parsed.findAll(
         lambda tag:
         tag.name == "a" and tag.get("href") != None)
@@ -96,11 +102,12 @@ def linearize_html_anchor(elem):
         if new_href != anchor.get("href"):
             anchor["href"] = new_href
             replaced = True
+    # Replace names (References/Identifiers)
     anchors_with_name = parsed.findAll(
         lambda tag:
         tag.name == "a" and tag.get("name") != None)
     for anchor in anchors_with_name:
-        new_name = linearize_link_path(anchor.get("name"))
+        new_name = linearize_identifier(anchor.get("name"))
         if new_name != anchor.get("name"):
             anchor["name"] = new_name
             replaced = True
@@ -122,7 +129,7 @@ def action(elem, doc):
     if isinstance(elem, pf.Link):
         linearize_url(elem)
     if hasattr(elem, 'identifier') and elem.identifier != '':
-        linearize_identifier(elem)
+        linearize_identifier_elem(elem)
     if isinstance(elem, pf.RawInline) and elem.format == 'html':
         linearize_html_anchor(elem)
     return elem

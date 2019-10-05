@@ -69,6 +69,7 @@ def finalize(doc):
             max = lvl
         if lvl < min and cnt > 0:
             min = lvl
+        ofh.write('# %s: %d\n' % ("Headers of level %d", MIN_LEVEL + lvl, cnt))
     ofh.write('# %s: %d\n' % ("Total headers", total))
     ofh.write('# %s: %d\n' % ("Min header level", min))
     ofh.write('# %s: %d\n' % ("Max header level", max))

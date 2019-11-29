@@ -46,8 +46,8 @@ workaround_level_underflow = False
 def prepare(doc):
     """The panflute filter init method."""
     global shift, workaround_level_overflow, workaround_level_underflow
-    shift = doc.get_metadata(
-        'sh_shift', "<sh_shift>")
+    shift = int(doc.get_metadata(
+        'sh_shift', 1))
     workaround_level_overflow = doc.get_metadata(
         'sh_workaround_level_overflow', "<sh_workaround_level_overflow>")
     workaround_level_underflow = doc.get_metadata(

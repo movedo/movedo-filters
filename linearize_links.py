@@ -65,7 +65,7 @@ def linearize_link_path(link_path):
         path = re.sub(REGEX_SUFFIX, '', path)
         path = re.sub(REGEX_BACK_REF, '_/', path)
         path = re.sub(REGEX_NON_REF, '-', path)
-    if ref != None:
+    if ref is not None:
         if path != '':
             path = path + '-'
         path = path + ref
@@ -96,7 +96,7 @@ def linearize_html_anchor(elem):
     # Replace anchors (links)
     anchors_with_href = parsed.findAll(
         lambda tag:
-        tag.name == "a" and tag.get("href") != None)
+        tag.name == "a" and tag.get("href") is not None)
     for anchor in anchors_with_href:
         new_href = '#' + linearize_link_path(anchor.get("href"))
         if new_href != anchor.get("href"):
@@ -105,7 +105,7 @@ def linearize_html_anchor(elem):
     # Replace names (References/Identifiers)
     anchors_with_name = parsed.findAll(
         lambda tag:
-        tag.name == "a" and tag.get("name") != None)
+        tag.name == "a" and tag.get("name") is not None)
     for anchor in anchors_with_name:
         new_name = linearize_identifier(anchor.get("name"))
         if new_name != anchor.get("name"):

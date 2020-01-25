@@ -65,7 +65,7 @@ def prefix_html(elem):
     replaced = False
     anchors_with_href = parsed.findAll(
         lambda tag:
-        tag.name == "a" and tag.get("href") != None)
+        tag.name == "a" and tag.get("href") is not None)
     for anchor in anchors_with_href:
         new_href = prefix_if_rel_path(anchor.get("href"))
         if new_href != anchor.get("href"):
@@ -73,7 +73,7 @@ def prefix_html(elem):
             replaced = True
     imgs_with_src = parsed.findAll(
         lambda tag:
-        tag.name == "img" and tag.get("src") != None)
+        tag.name == "img" and tag.get("src") is not None)
     for img in imgs_with_src:
         new_src = prefix_if_rel_path(img.get("src"))
         if new_src != img.get("src"):

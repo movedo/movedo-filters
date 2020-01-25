@@ -53,7 +53,7 @@ def replace_link_suffix(url):
         ref = None
     if path.endswith(ext_from):
         url = path[:-len(ext_from)] + ext_to
-        if ref != None:
+        if ref is not None:
             url = url + '#' + ref
     return url
 

@@ -21,15 +21,14 @@ def eprint(*args, **kwargs):
     """Prints a message to stderr, just like `print()` does for stdout)."""
     print(*args, file=sys.stderr, **kwargs)
 
-def is_url(str):
+def is_url(a_str):
     """Returns True if the argument is a URL."""
-    return re.match(REGEX_URL, str) is not None
+    return re.match(REGEX_URL, a_str) is not None
 
-def is_abs_path(str):
+def is_abs_path(a_str):
     """Returns True if the argument is an absolute, local file path."""
-    return re.match(REGEX_ABS_PATH, str) is not None
+    return re.match(REGEX_ABS_PATH, a_str) is not None
 
-def is_rel_path(str):
+def is_rel_path(a_str):
     """Returns True if the argument is an absolute, local file path."""
-    return not (is_url(str) or is_abs_path(str))
-
+    return not (is_url(a_str) or is_abs_path(a_str))

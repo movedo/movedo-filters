@@ -29,11 +29,14 @@ $ pandoc -f markdown -t markdown --atx-headers \
 """
 
 # HACK for panflute on python 2
+#      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
+
+from _common import check_version, is_url
+check_version()
 
 import os
 import panflute as pf
-from _common import is_url
 
 def normalize_url(elem):
     """Normalize the elem.url."""

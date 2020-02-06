@@ -16,6 +16,16 @@ import sys
 # constants
 REGEX_URL = re.compile(r'^(?:[a-z:_-]+)://', re.IGNORECASE)
 REGEX_ABS_PATH = re.compile(r'^([A-Z]:)?[/\\]', re.IGNORECASE)
+REQUIRED_VERSION = (3, 6)
+
+def check_version():
+    """Checks whether we are running on the minimum required python version."""
+    cur_version = sys.version_info
+    if cur_version < REQUIRED_VERSION:
+        msg = (("ERROR: Your Python interpreter is too old. "
+                "Please consider upgrading to at least %d.%d.")
+               % (REQUIRED_VERSION[0], REQUIRED_VERSION[1]))
+        sys.exit(msg)
 
 def eprint(*args, **kwargs):
     """Prints a message to stderr, just like `print()` does for stdout)."""

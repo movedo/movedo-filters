@@ -26,12 +26,15 @@ $ pandoc -f markdown -t markdown --atx-headers \
 """
 
 # HACK for panflute on python 2
+#      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
+
+from _common import check_version, is_rel_path
+check_version()
 
 import re
 import panflute as pf
 from bs4 import BeautifulSoup
-from _common import is_rel_path
 
 # parameters
 # should be something like 'some/static/prefix/'

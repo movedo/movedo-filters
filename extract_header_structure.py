@@ -21,10 +21,13 @@ $ pandoc -f markdown -t markdown --atx-headers \
 """
 
 # HACK for panflute on python 2
+#      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
 
+from _common import check_version, eprint
+check_version()
+
 import panflute as pf
-from _common import eprint
 
 # constants
 MIN_LEVEL = 1

@@ -47,8 +47,7 @@ def prefix_if_rel_path(url):
     Prefixes the input URL with the prefix,
     if the URL is a link to/image with a relative path.
     """
-    global prefix
-    global file_name
+    global prefix, file_name
     if is_rel_path(url):
         if url.startswith('#'):
             url = file_name + url
@@ -90,8 +89,7 @@ def prefix_html(elem):
 
 def prepare(doc):
     """The panflute filter init method."""
-    global prefix
-    global file_name
+    global prefix, file_name
     prefix = get_arg(doc, 'allp_prefix')
     file_name = get_arg(doc, 'allp_file')
 

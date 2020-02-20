@@ -126,7 +126,8 @@ def prepare(doc):
     id_prefix = linearize_link_path(doc_path)
     # Add reference for the whole file at the top
     if id_prefix != '':
-        doc.content.insert(0, pf.Para(pf.RawInline('<a name="%s"/>' % id_prefix)))
+        # empty here, because the id_prefix will be added later in action()
+        doc.content.insert(0, pf.Para(pf.RawInline('<a name=""/>')))
 
 def action(elem, doc):
     """The panflute filter main method, called once per element."""

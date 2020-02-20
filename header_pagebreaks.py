@@ -35,7 +35,7 @@ def prepare(doc):
 
 def action(elem, doc):
     if isinstance(elem, pf.Header) and elem.level <= max_level:
-        pagebreak = pf.RawBlock('\pagebreak{}', format='latex')
+        pagebreak = pf.RawBlock('\\pagebreak{}', format='latex')
         return [pagebreak, elem]
 
 def finalize(doc):

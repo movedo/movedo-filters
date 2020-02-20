@@ -4,7 +4,7 @@ This is part of the [MoVeDo](https://github.com/movedo) project.
 See LICENSE.md for copyright information.
 
 Adds a prefix to all *local*, *relative* link & image paths,
-consisting of the relative path from pwd to the input document.
+consisting of the relative path from PWD to the input document.
 So for example, if we call `pandoc ... my/input/file.md`,
 the paths would be prefixed with 'my/input/'.
 

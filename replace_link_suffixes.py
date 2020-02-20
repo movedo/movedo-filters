@@ -42,6 +42,7 @@ ext_to = '.html'
 
 def prepare(doc):
     """The panflute filter init method."""
+    global relative_only, ext_from, ext_to
     relative_only = doc.get_metadata('rls_relative_only', "<rls_relative_only>")
     ext_from = doc.get_metadata('rls_ext_from', "<rls_ext_from>")
     ext_to = doc.get_metadata('rls_ext_to', "<rls_ext_to>")

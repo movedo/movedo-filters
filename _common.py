@@ -42,3 +42,19 @@ def is_abs_path(a_str):
 def is_rel_path(a_str):
     """Returns True if the argument is an absolute, local file path."""
     return not (is_url(a_str) or is_abs_path(a_str))
+
+def get_arg(doc, key, default_value=None):
+    """
+    Returns the argument value (pandoc meta-data parameter) for the given key,
+    or raises an error if it is not given, if `default_value` is `None`.
+    """
+    required = default_value is None
+    if required:
+        default_value = "<%s>" % key
+    value = doc.get_metadata(key, default_value)
+    if required and value == default_value:
+        raise ValueError(
+            ("Missing filter argument '%s'; " +
+             "Use for example '-M %s=\"some_value\"' on the command line.")
+            % (key, key))
+    return value

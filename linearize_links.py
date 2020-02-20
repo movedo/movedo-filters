@@ -26,7 +26,7 @@ $ pandoc -f markdown -t markdown --atx-headers \
 #      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
 
-from _common import check_version, is_rel_path
+from _common import check_version, is_rel_path, get_arg
 check_version()
 
 import re
@@ -122,7 +122,7 @@ def linearize_html_anchor(elem):
 def prepare(doc):
     """The panflute filter init method."""
     global doc_path, id_prefix
-    doc_path = doc.get_metadata('ll_doc_path', "<ll_doc_path>")
+    doc_path = get_arg(doc, 'll_doc_path')
     id_prefix = linearize_link_path(doc_path)
     # Add reference for the whole file at the top
     if id_prefix != '':

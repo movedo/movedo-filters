@@ -24,7 +24,7 @@ $ pandoc -f markdown -t markdown --atx-headers \
 #      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
 
-from _common import check_version, eprint
+from _common import check_version, eprint, get_arg
 check_version()
 
 import panflute as pf
@@ -47,7 +47,7 @@ def prepare(doc):
     global counters, output_file, ofh
     for _ in range(MIN_LEVEL, MAX_LEVEL):
         counters.append(0)
-    output_file = doc.get_metadata('ehs_output_file', "<ehs_output_file>")
+    output_file = get_arg(doc, 'ehs_output_file')
     ofh = open(output_file, "w")
 
 def action(elem, doc):

@@ -25,7 +25,7 @@ $ pandoc -f markdown -t markdown --atx-headers \
 #      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
 
-from _common import check_version, is_rel_path
+from _common import check_version, is_rel_path, get_arg
 check_version()
 
 import re
@@ -37,15 +37,15 @@ REGEX_PATH_DELETER = re.compile(r'^.*#')
 
 # parameters
 relative_only = True
-ext_from = '.md'
-ext_to = '.html'
+ext_from = '.<unset_ext_from>'
+ext_to = '.<unset_ext_to>'
 
 def prepare(doc):
     """The panflute filter init method."""
     global relative_only, ext_from, ext_to
-    relative_only = doc.get_metadata('rls_relative_only', "<rls_relative_only>") == 'True'
-    ext_from = doc.get_metadata('rls_ext_from', "<rls_ext_from>")
-    ext_to = doc.get_metadata('rls_ext_to', "<rls_ext_to>")
+    relative_only = get_arg(doc, 'rls_relative_only', 'True') == 'True'
+    ext_from = get_arg(doc, 'rls_ext_from')
+    ext_to = get_arg(doc, 'rls_ext_to')
 
 def replace_link_suffix(url):
     """If the URL fits, we replace the file suffix."""

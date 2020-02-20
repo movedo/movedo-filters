@@ -26,7 +26,7 @@ $ pandoc -f markdown -t markdown --atx-headers \
 #      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
 
-from _common import check_version, eprint
+from _common import check_version, eprint, get_arg
 check_version()
 
 import panflute as pf
@@ -49,12 +49,11 @@ workaround_level_underflow = False
 def prepare(doc):
     """The panflute filter init method."""
     global shift, workaround_level_overflow, workaround_level_underflow
-    shift = int(doc.get_metadata(
-        'sh_shift', 1))
-    workaround_level_overflow = doc.get_metadata(
-        'sh_workaround_level_overflow', "<sh_workaround_level_overflow>") == 'True'
-    workaround_level_underflow = doc.get_metadata(
-        'sh_workaround_level_underflow', "<sh_workaround_level_underflow>") == 'True'
+    shift = int(get_arg(doc, 'sh_shift'))
+    workaround_level_overflow = get_arg(doc,
+        'sh_workaround_level_overflow', 'True') == 'True'
+    workaround_level_underflow = get_arg(doc,
+        'sh_workaround_level_underflow', 'False') == 'True'
 
 def action(elem, doc):
     """The panflute filter main method, called once per element."""

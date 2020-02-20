@@ -29,7 +29,7 @@ $ pandoc -f markdown -t markdown --atx-headers \
 #      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
 
-from _common import check_version, is_rel_path
+from _common import check_version, is_rel_path, get_arg
 check_version()
 
 import re
@@ -92,8 +92,8 @@ def prepare(doc):
     """The panflute filter init method."""
     global prefix
     global file_name
-    prefix = doc.get_metadata('allp_prefix', "<allp_prefix>")
-    file_name = doc.get_metadata('allp_file', "<allp_file>")
+    prefix = get_arg(doc, 'allp_prefix')
+    file_name = get_arg(doc, 'allp_file')
 
 def action(elem, doc):
     """The panflute filter main method, called once per element."""

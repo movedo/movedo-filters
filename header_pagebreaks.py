@@ -19,7 +19,7 @@ $ pandoc -f markdown -t markdown --atx-headers \
 #      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
 from __future__ import unicode_literals
 
-from _common import check_version
+from _common import check_version, get_arg
 check_version()
 
 import panflute as pf
@@ -31,7 +31,7 @@ max_level = 0
 def prepare(doc):
     """The panflute filter init method."""
     global max_level
-    max_level = int(doc.get_metadata('hp_max_level', '2'))
+    max_level = int(get_arg(doc, 'hp_max_level', '2'))
 
 def action(elem, doc):
     if isinstance(elem, pf.Header) and elem.level <= max_level:

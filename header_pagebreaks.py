@@ -30,7 +30,7 @@ max_level = 0
 
 def prepare(doc):
     """The panflute filter init method."""
-    global prefix
+    global max_level
     max_level = int(doc.get_metadata('hp_max_level', '2'))
 
 def action(elem, doc):

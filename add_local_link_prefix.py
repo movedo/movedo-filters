@@ -51,7 +51,8 @@ def prefix_if_rel_path(url):
     if is_rel_path(url):
         if url.startswith('#'):
             url = file_name + url
-        url = prefix + url
+        else:
+            url = prefix + url
     return url
 
 def prefix_elem_if_rel_path(elem):

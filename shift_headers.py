@@ -52,9 +52,9 @@ def prepare(doc):
     shift = int(doc.get_metadata(
         'sh_shift', 1))
     workaround_level_overflow = doc.get_metadata(
-        'sh_workaround_level_overflow', "<sh_workaround_level_overflow>")
+        'sh_workaround_level_overflow', "<sh_workaround_level_overflow>") == 'True'
     workaround_level_underflow = doc.get_metadata(
-        'sh_workaround_level_underflow', "<sh_workaround_level_underflow>")
+        'sh_workaround_level_underflow', "<sh_workaround_level_underflow>") == 'True'
 
 def action(elem, doc):
     """The panflute filter main method, called once per element."""

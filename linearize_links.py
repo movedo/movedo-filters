@@ -45,9 +45,6 @@ REGEX_NON_REF = re.compile(r'[^a-z0-9_-]')
 doc_path = '<DEFAULT_DOC_PATH>'
 id_prefix = ''
 
-# globals
-#id_elems = {}
-
 def linearize_link_path(link_path):
     """
     Converts a path+reference string to a reference only.

@@ -19,7 +19,7 @@ out of a bunch of Markdown or HTML files scatered around the filesystem.
 Usage example:
 $ pandoc -f markdown -t markdown --atx-headers \
         -M allp_prefix="some/static/prefix/" \
-        -M allp_file="file-name.md" \
+        -M allp_file="input.md" \
         --filter add_local_link_prefix.py \
         -o output.md \
         input.md

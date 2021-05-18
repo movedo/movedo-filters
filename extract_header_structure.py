@@ -62,22 +62,20 @@ def finalize(doc):
     """The panflute filter "destructor" method."""
     ofh.write('####\n')
     total = 0
-    min = 999
-    max = 0
+    min_l = 999
+    max_l = 0
     for lvl in range(MIN_LEVEL, MAX_LEVEL):
         cnt = counters[lvl - MIN_LEVEL]
         total += cnt
-        if lvl > max and cnt > 0:
-            max = lvl
-        if lvl < min and cnt > 0:
-            min = lvl
-        ofh.write('# %s: %d\n' % ("Headers of level %d", MIN_LEVEL + lvl, cnt))
+        if lvl > max_l and cnt > 0:
+            max_l = lvl
+        if lvl < min_l and cnt > 0:
+            min_l = lvl
+        ofh.write('# %s: %d\n' % (("Headers of level %d" % (MIN_LEVEL + lvl)), cnt))
     ofh.write('# %s: %d\n' % ("Total headers", total))
-    ofh.write('# %s: %d\n' % ("Min header level", min))
-    ofh.write('# %s: %d\n' % ("Max header level", max))
+    ofh.write('# %s: %d\n' % ("Min header level", min_l))
+    ofh.write('# %s: %d\n' % ("Max header level", max_l))
     ofh.close()
-
-    pass
 
 def main(doc=None):
     """

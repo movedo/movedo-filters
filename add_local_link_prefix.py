@@ -34,6 +34,7 @@ check_version()
 
 import re
 import panflute as pf
+# TODO Instead of bs4/BeautifulSoup for parsing HTML, use pandoc itsself - panflute has functions for that, see its docu
 from bs4 import BeautifulSoup
 
 # parameters

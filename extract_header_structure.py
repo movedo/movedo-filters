@@ -13,7 +13,7 @@ This might typicaly be used to gater document strucutre info,
 which would be used by an other filter as input to modfy the document.
 
 Usage example:
-$ pandoc -f markdown -t markdown --atx-headers \
+$ pandoc -f markdown -t markdown --markdown-headings=atx \
         -M ehs_output_file="extracted_headers.txt" \
         --filter extract_header_structure.py \
         -o output.md \
@@ -38,7 +38,6 @@ MAX_LEVEL = 10
 # parameters
 # how many instances of each header level we encountered
 counters = []
-# if True, instead of an exception when resulting header levels are below MIN_LEVEL,
 output_file = ''
 ofh = None
 

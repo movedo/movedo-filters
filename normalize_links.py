@@ -19,10 +19,10 @@ This might typicaly be used as an intermediate step
 when combining a multitude of documents found within a directory tree
 into a single document at the directory trees root.
 Or more pracitcally: when creating a single PDF
-out of a bunch of Markdown or HTML files scatered aroudn the filesystem.
+out of a bunch of Markdown or HTML files scatered around the filesystem.
 
 Usage example:
-$ pandoc -f markdown -t markdown --atx-headers \
+$ pandoc -f markdown -t markdown --markdown-headings=atx \
         --filter normalize_links.py \
         -o output.md \
         input.md

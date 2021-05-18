@@ -12,7 +12,7 @@ while converting the format from Markdown to HTML,
 as to maintain local cross-linking wihtin the used format.
 
 Usage example:
-$ pandoc -f markdown -t markdown --atx-headers \
+$ pandoc -f markdown -t markdown --markdown-headings=atx \
         -M rls_relative_only=True \
         -M rls_ext_from=".md" \
         -M rls_ext_to=".html" \

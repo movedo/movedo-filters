@@ -6,7 +6,7 @@ See LICENSE.md for copyright information.
 Pretty print contents of the filters' input (both sys.argv and the JSON)
 
 Usage example:
-$ pandoc -f markdown -t markdown --atx-headers \
+$ pandoc -f markdown -t markdown --markdown-headings=atx \
         --filter debug.py \
         -o output.md \
         input.md

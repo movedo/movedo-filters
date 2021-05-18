@@ -8,7 +8,7 @@ Adds page-breaks before headers (of a certain level or lower).
 It is implemented as a Pandoc filter using panflute.
 
 Usage example:
-$ pandoc -f markdown -t markdown --atx-headers \
+$ pandoc -f markdown -t markdown --markdown-headings=atx \
         -M max_level=1 \
         --filter header_pagebreaks.py \
         -o output.md \

@@ -13,7 +13,7 @@ down by one level, if multiple such files are to be combined into a single one,
 each prependet by a top-level header.
 
 Usage example:
-$ pandoc -f markdown -t markdown --atx-headers \
+$ pandoc -f markdown -t markdown --markdown-headings=atx \
         -M sh_shift=1 \
         -M sh_workaround_level_overflow=True \
         -M sh_workaround_level_underflow=False \

@@ -8,14 +8,14 @@ to pure ref-style links, and does the same with the references.
 
 It is implemented as a Pandoc filter using panflute.
 
-This might typicaly be used as an intermediary step
+This might typicaly be used as an intermediate step
 when combining a multitude of documents found within a directory tree
 into a single document at the directory trees root.
 Or more pracitcally: when creating a single PDF
-out of a bunch of Markdown or HTML files scatered aroudn the filesystem.
+out of a bunch of Markdown or HTML files scatered around the filesystem.
 
 Usage example:
-$ pandoc -f markdown -t markdown --atx-headers \
+$ pandoc -f markdown -t markdown --markdown-headings=atx \
         -M ll_doc_path="dir/to/current.md" \
         --filter linearize_links.py \
         -o output.md \

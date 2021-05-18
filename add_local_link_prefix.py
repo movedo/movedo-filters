@@ -10,14 +10,14 @@ the paths would be prefixed with 'my/input/'.
 
 It is implemented as a Pandoc filter using panflute.
 
-This might typicaly be used as a preparation step
+This might typicaly be used as an intermediate step
 when combining a multitude of documents found within a directory tree
 into a single document at the directory trees root.
 Or more pracitcally: when creating a single PDF
 out of a bunch of Markdown or HTML files scatered around the filesystem.
 
 Usage example:
-$ pandoc -f markdown -t markdown --atx-headers \
+$ pandoc -f markdown -t markdown --markdown-headings=atx \
         -M allp_prefix="some/static/prefix/" \
         -M allp_file="input.md" \
         --filter add_local_link_prefix.py \

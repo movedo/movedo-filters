@@ -9,7 +9,7 @@ It is implemented as a Pandoc filter using panflute.
 
 Usage example:
 $ pandoc -f markdown -t markdown --markdown-headings=atx \
-        -M max_level=1 \
+        -M hp_max_level=1 \
         --filter header_pagebreaks.py \
         -o output.md \
         input.md

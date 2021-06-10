@@ -16,10 +16,10 @@ out of a bunch of Markdown or HTML files scatered around the filesystem.
 
 Usage example:
 $ pandoc -f markdown -t markdown --markdown-headings=atx \
-        -M ll_doc_path="dir/to/current.md" \
+        -M ll_doc_path="dir/to/input.md" \
         --filter linearize_links.py \
-        -o output.md \
-        input.md
+        -o "other-dir/to/output.md" \
+        "dir/to/input.md"
 """
 
 # HACK for panflute on python 2

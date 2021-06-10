@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2016 Sergio Correia <sergio.correia@gmail.com>
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 """
 This is part of the [MoVeDo](https://github.com/movedo) project.
-See LICENSE.md for copyright information.
 
 Pretty print contents of the filters' input (both sys.argv and the JSON)
 
@@ -21,7 +25,6 @@ import pprint
 import pkg_resources
 
 import panflute as pf
-
 
 def action(elem, doc):
     if isinstance(elem, pf.Doc):
@@ -44,10 +47,8 @@ def action(elem, doc):
           pf.CodeBlock(raw)
         ]
 
-
 def main(doc=None):
     return pf.run_filter(action, doc=doc)
-
 
 if __name__ == '__main__':
     main()

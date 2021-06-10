@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # MoVeDo filters
 
 A set of fairly general docuemnt filters (Pandoc filters written in Python for the Panflute library).

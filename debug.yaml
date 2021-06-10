@@ -1,3 +1,5 @@
+SPDX-FileCopyrightText: 2016 Sergio Correia <sergio.correia@gmail.com>
+SPDX-License-Identifier: BSD-3-Clause
 title: debug.py - inspect Pandoc's JSON output
 author: Sergio Correia
 homepage: https://github.com/sergiocorreia/panflute-filters

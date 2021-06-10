@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 ## TODO (MoVeDo Filters)
 
 - [x] header-structure-extractor (also collects statistics about headers, like: number of headers in total, number of headers per level, min level, max level)

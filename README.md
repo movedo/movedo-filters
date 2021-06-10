@@ -6,6 +6,7 @@ SPDX-License-Identifier: CC0-1.0
 
 # MoVeDo filters
 
-A set of fairly general docuemnt filters (Pandoc filters written in Python for the Panflute library).
+A set of fairly general document filters
+(Pandoc filters written in Python for the Panflute library).
 
 Please see the individual files header comments for details of what they are doing.

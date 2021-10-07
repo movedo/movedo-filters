@@ -45,6 +45,7 @@ REGEX_PATH_DELETER = re.compile(r'^.*#')
 REGEX_SUFFIX = re.compile(r'\.[^.]*$')
 REGEX_BACK_REF = re.compile(r'(\.\./)')
 REGEX_NON_REF = re.compile(r'[^a-z0-9_-]')
+REGEX_NON_ALPHA_FIRST = re.compile(r'^([^a-zA-Z])')
 
 # parameters
 # relative path to the document currently being processed
@@ -54,6 +55,9 @@ id_prefix = ''
 def linearize_link_path(link_path):
     """
     Converts a path+reference string to a reference only.
+    NOTE: References/anchors/fragments *must* start
+          with a character in '[a-zA-Z]';
+          thus we add an 'X' in front if they do not.
     Examples:
     * dir/file.md#some-ref -> dir-file-some-ref
     * dir/file.md -> dir-file
@@ -71,6 +75,7 @@ def linearize_link_path(link_path):
         path = re.sub(REGEX_SUFFIX, '', path)
         path = re.sub(REGEX_BACK_REF, '_/', path)
         path = re.sub(REGEX_NON_REF, '-', path)
+        path = re.sub(REGEX_NON_ALPHA_FIRST, r'X\1', path)
     if ref is not None:
         if path != '':
             path = path + '-'

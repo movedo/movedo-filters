@@ -16,9 +16,6 @@ $ pandoc -f markdown -t markdown --markdown-headings=atx \
         input.md
 """
 
-# HACK for panflute on python 2
-from __future__ import unicode_literals
-
 import sys
 import json
 import pprint

@@ -33,10 +33,6 @@ $ pandoc -f markdown -t markdown --markdown-headings=atx \
         input.md
 """
 
-# HACK for panflute on python 2
-#      -> DEPRECATED, Python 2 is not supported anymore by panflute anyway
-from __future__ import unicode_literals
-
 from _common import check_version, is_url
 check_version()
 

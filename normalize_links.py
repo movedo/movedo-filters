@@ -39,10 +39,16 @@ check_version()
 import os
 import panflute as pf
 
+def normalize(url):
+    """Normalize a URL string."""
+    norm_url = url
+    if not is_url(url):
+        norm_url = os.path.normpath(url)
+    return norm_url
+
 def normalize_url(elem):
     """Normalize the elem.url."""
-    if not is_url(elem.url):
-        elem.url = os.path.normpath(elem.url)
+    elem.url = normalize(elem.url)
 
 def prepare(doc):
     """The panflute filter init method."""

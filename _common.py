@@ -20,6 +20,7 @@ import sys
 # constants
 REGEX_URL = re.compile(r'^(?:[a-z:_-]+)://', re.IGNORECASE)
 REGEX_ABS_PATH = re.compile(r'^([A-Z]:)?[/\\]', re.IGNORECASE)
+REGEX_SPECIAL_LINK = re.compile(r'^mailto:', re.IGNORECASE)
 REQUIRED_VERSION = (3, 6)
 
 def check_version():
@@ -43,9 +44,16 @@ def is_abs_path(a_str):
     """Returns True if the argument is an absolute, local file path."""
     return re.match(REGEX_ABS_PATH, a_str) is not None
 
+def is_special_link(a_str):
+    """
+    Returns True if the argument is a special link type,
+    e.g. a "mailto:*" one.
+    """
+    return re.match(REGEX_SPECIAL_LINK, a_str) is not None
+
 def is_rel_path(a_str):
     """Returns True if the argument is an absolute, local file path."""
-    return not (is_url(a_str) or is_abs_path(a_str))
+    return not (is_url(a_str) or is_abs_path(a_str) or is_special_link(a_str))
 
 def get_arg(doc, key, default_value=None):
     """

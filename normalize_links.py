@@ -37,7 +37,10 @@ from _common import check_version, is_url
 check_version()
 
 import os
+import re
 import panflute as pf
+# TODO Instead of bs4/BeautifulSoup for parsing HTML, use pandoc itsself - panflute has functions for that, see its docu
+from bs4 import BeautifulSoup
 
 def normalize(url):
     """Normalize a URL string."""
@@ -50,6 +53,33 @@ def normalize_url(elem):
     """Normalize the elem.url."""
     elem.url = normalize(elem.url)
 
+def normalize_html_link_or_image(elem):
+    """Normalizes each a.href and img.src URL in a piece of HTML."""
+    parsed = BeautifulSoup(elem.text, 'html.parser')
+    replaced = False
+    # Normalize anchors (links)
+    anchors_with_href = parsed.findAll(
+        lambda tag:
+        tag.name == "a" and tag.get("href") is not None)
+    for anchor in anchors_with_href:
+        new_href = normalize(anchor.get("href"))
+        if new_href != anchor.get("href"):
+            anchor["href"] = new_href
+            replaced = True
+    # Normalize images
+    imgs_with_src = parsed.findAll(
+        lambda tag:
+        tag.name == "img" and tag.get("src") is not None)
+    for img in imgs_with_src:
+        new_src = normalize(img.get("src"))
+        if new_src != img.get("src"):
+            img["src"] = new_src
+            replaced = True
+    if replaced:
+        elem.text = str(parsed)
+        # HACK Remove end-tag automatically inserted by BeautifulSoup as a sanitation matter, see https://stackoverflow.com/questions/57868615/how-to-disable-the-sanitizer-beautifulsoup
+        elem.text = re.sub('></[^>]+>$', '>', elem.text)
+
 def prepare(doc):
     """The panflute filter init method."""
     pass
@@ -58,6 +88,8 @@ def action(elem, doc):
     """The panflute filter main method, called once per element."""
     if isinstance(elem, (pf.Link, pf.Image)):
         normalize_url(elem)
+    if isinstance(elem, pf.RawInline) and elem.format == 'html':
+        normalize_html_link_or_image(elem)
     return elem
 
 def finalize(doc):

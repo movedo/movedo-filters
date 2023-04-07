@@ -1,0 +1,194 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Pandoc Link Checker - Trial (wayyy before alpha state)
+
+input_docs_file=input_docs.txt
+links_file=links.txt
+anchors_file=anchors.txt
+#failed_to_dl_file=failed-to-dl.txt
+unavailable_doc_file=unavailable-docs.txt
+available_doc_file=available-docs.txt
+#docs_root=../../main/templates
+#docs_root=../../../../Beitragsordnung/build/
+docs_root=tmp
+docs_selector=".*\.\(md\|html\)"
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+FAIL="${RED}Fail${NC}"
+OK="${GREEN}Ok${NC}"
+# TODO Replace the 'echo' below with ''
+DEBUG='echo'
+#DEBUG=''
+
+# Phases
+phase_scan_input=true
+phase_check_availability=true
+phase_fetch_document_anchors=true
+phase_evaluate=true
+
+# Returns with exit state 0 if the first argument is a valid URL,
+# with exit state != 0 otherwise (-> we will assume it being a path).
+function is_url() {
+	arg="$1"
+	echo "$arg" | grep -q -E -e '[a-z_-]+:.+'
+}
+#is_url "https://www.example.com/sub/path/here.html#some-other-anchor" && echo yes || echo no
+#is_url "../../wefw/wefwef/../wefwe.md" && echo yes || echo no
+#exit 0
+
+function check_url_available() {
+	url="$1"
+	$DEBUG wget -q --spider "$url"
+}
+
+function check_local_doc_exists() {
+	doc_path="$1"
+	[ -e "$doc_path" ]
+}
+
+# Downloads a URL.
+# Example usage:
+# download "local_file.html" "https://www.example.com/path/file.html"
+function download() {
+	local_file="$1"
+	url="$2"
+	# TODO find the right wget/curl command
+	$DEBUG wget -O "$local_file" "$url"
+}
+
+# Parse all input documents,
+# extracting their links and anchors.
+if $phase_scan_input
+then
+	rm -f "$links_file"
+	rm -f "$anchors_file"
+	rm -f "$input_docs_file"
+	echo "Scanning input documents:"
+	find "$docs_root" -regex "$docs_selector" \
+		| sort \
+		| while read -r doc_to_check
+	do
+		echo "$doc_to_check ..."
+		echo "$doc_to_check" >> "$input_docs_file"
+		pandoc \
+			-M elaa_doc_path="$doc_to_check" \
+			-M elaa_links_file="$links_file" \
+			-M elaa_anchors_file="$anchors_file" \
+			--filter "extract_links_and_anchors.py" \
+			-t native -o /dev/null \
+			"$doc_to_check"
+	done
+fi
+
+echo
+cat "$links_file"
+echo
+cat "$anchors_file"
+echo
+exit 0
+
+# Check all linked-to documents - which are not linked to by anchor(s) -
+# for availability (file exists or URL is fetchable),
+# which are not also input documents.
+if $phase_check_availability
+then
+	echo
+	echo "Checking File availability:"
+	grep -v -e '.*:.*:.*:.*#.*' < "$links_file" \
+		| sed \
+			-e 's/[^:]*:[^:]*:[^:]*://' \
+		| sort -u \
+		| while read -r doc_to_check_reachability
+	do
+		echo "$doc_to_check_reachability ..."
+		if is_url "$doc_to_check_reachability"
+		then
+			check_fun=check_url_available
+		else
+			check_fun=check_local_doc_exists
+		fi
+		if $check_fun "$doc_to_check_reachability"
+		then
+			echo "$doc_to_check_reachability" >> "$unavailable_doc_file"
+		else
+			echo "$doc_to_check_reachability" >> "$available_doc_file"
+		fi
+	done
+fi
+
+# Parse all linked to documents that are linked to by anchor(s),
+# that are not also input documents,
+# parsing their anchors.
+if $phase_fetch_document_anchors
+then
+	echo
+	echo "Fetching target docs and parsing anchors:"
+	grep -e '.*:.*:.*:.\+#.\+' < "$links_file" \
+		| sed \
+			-e 's/[^:]*:[^:]*:[^:]*://' \
+			-e 's/#.*//' \
+		| sort -u \
+		| while read -r doc_to_extract_anchors
+	do
+		echo "$doc_to_extract_anchors ..."
+		local_doc="/tmp/$(basename "$0").tmp_download.$(basename "$doc_to_extract_anchors")"
+		if is_url "$doc_to_extract_anchors"
+		then
+			check_fun="download \"$local_doc\""
+		else
+			check_fun=check_local_doc_exists
+			ln -s "$doc_to_extract_anchors" "$local_doc"
+		fi
+		if $check_fun "$doc_to_extract_anchors"
+		then
+			echo "$doc_to_extract_anchors" >> "$available_doc_file"
+		else
+			echo "$doc_to_extract_anchors" >> "$unavailable_doc_file"
+			rm -f "$local_doc"
+			continue
+		fi
+		pandoc \
+			-M elaa_doc_path="$doc_to_extract_anchors" \
+			-M elaa_links_file="" \
+			-M elaa_anchors_file="$anchors_file" \
+			--filter "extract_links_and_anchors.py" \
+			-t native -o /dev/null \
+			"$local_doc"
+		rm -f "$local_doc"
+	done
+fi
+
+# Evaluate/Output which links in the input documents are valid.
+if $phase_evaluate
+then
+	while read -r link
+	do
+		link_url="$(echo "$link" | sed -e 's/[^:]*:[^:]*:[^:]*://')"
+		link_url_no_anchor="$(echo "$link_url" | sed -e 's/#.\+//')"
+		if grep -q -e "^$link_url\$" < "$unavailable_doc_file"
+		then
+			echo -e "$link -> $FAIL"
+		else
+			if [ "$link_url" = "$link_url_no_anchor" ]
+			then
+				# link without anchor
+				echo -e "$link -> $OK"
+			else
+				anchor="$(echo "$link_url" | sed -e 's/.*#//')"
+				target_doc="$(if [ -n "$link_url_no_anchor" ]; then echo "$link_url_no_anchor"; else echo "$link" | sed -e 's/:.*//'; fi)"
+				if grep -q -e "^$target_doc:[^:]\+:[^:]\+:$anchor\$" < "$anchors_file"
+				then
+					echo -e "$link -> $OK"
+				else
+					echo -e "$link -> $FAIL"
+				fi
+			fi
+		fi
+	done < "$links_file"
+fi

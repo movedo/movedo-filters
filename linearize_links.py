@@ -10,6 +10,29 @@ See LICENSE.md for copyright information.
 
 Converts all *local*, *relative* link & image paths
 to pure ref-style links, and does the same with the references.
+TODO document better (for example, this is used for/only makes sense for combining multiple MD files into a single one.
+
+Example:
+
+```
+[l-name](some/more/here.txt)
+[l2-name](./some/more/here.txt#my-title)
+[l3-name](https://www.example.com/sub/path/here.html#some-anchor)
+
+<a href="sub/path/here.html#some-other-anchor">l4-name</a>
+<a href="https://www.example.com/sub/path/here.html#some-other-anchor">l5-name</a>
+```
+
+->
+
+```
+[l-name](../some/more/here.txt)
+[l2-name](../some/more/here.txt#my-title)
+[l3-name](https://www.example.com/sub/path/here.html#some-anchor)
+
+<a href="sub/path/here.html#some-other-anchor">l4-name</a>
+<a href="https://www.example.com/sub/path/here.html#same-anchor">l5-name</a>
+```
 
 It is implemented as a Pandoc filter using panflute.
 
